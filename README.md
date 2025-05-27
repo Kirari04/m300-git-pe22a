@@ -1,26 +1,29 @@
-# Project Title
+# hetzner-k3s - Nextcloud
 
-A brief description of what this project does and who it's for.
+## Ressourcen
 
-## Table of Contents
+- Hetzner K3s [https://github.com/vitobotta/hetzner-k3s](https://github.com/vitobotta/hetzner-k3s)
+- Nextcloud Helm Chart [https://github.com/nextcloud/helm/blob/main/charts/nextcloud/README.md](https://github.com/nextcloud/helm/blob/main/charts/nextcloud/README.md#introduction)
+- [Mysql + Replica](https://kubernetes.io/docs/tasks/run-application/run-replicated-stateful-application/)
 
-- [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
+## Testing
 
-## Installation
+Zuerst wird alles mit https://microk8s.io/ getestet.
 
-Instructions on how to install and set up the project.
+### Microk8s installieren
 
-## Usage
+```bash
+sudo snap install microk8s --classic
 
-Examples and instructions for using the project.
+sudo usermod -a -G microk8s user
+sudo chown -R user ~/.kube
 
-## Contributing
+microk8s status --wait-ready
 
-Guidelines for contributing to the project.
+microk8s enable dashboard
 
-## License
+microk8s enable dns
 
-Specify the license under which the project is distributed.
+microk8s enable registry
+```
+
