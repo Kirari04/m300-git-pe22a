@@ -1,0 +1,4 @@
+portainer-m300.local {
+    reverse_proxy portainer:9000
+    tls internal
+}

@@ -1,0 +1,34 @@
+services:
+  caddy:
+    image: caddy/caddy:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./cfg/Caddyfile:/etc/caddy/Caddyfile
+      - ./cfg/caddy_data:/data
+    networks:
+      - m300_net
+  portainer:
+    image: portainer/portainer-ce:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./cfg/portainer_data:/data
+    networks:
+      - m300_net
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - ./cfg/mysql_data:/var/lib/mysql
+    networks:
+      - m300_net
+networks:
+  m300_net: 
+    driver: bridge
+    name: m300_net

@@ -1,1 +1,4 @@
 .env
+caddy_data
+mysql_data
+portainer_data
