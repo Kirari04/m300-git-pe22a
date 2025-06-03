@@ -1,6 +1,0 @@
-version: '3.8'
-
-networks:
-  my_app_net: # Defines the network
-    driver: bridge
-    name: my_app_net # Explicitly naming the network

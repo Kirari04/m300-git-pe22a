@@ -1,24 +1,29 @@
-version: '3.8'
+
 
 services:
   portainer:
-    image: portainer/portainer-ce:lts #
+    image: portainer/portainer-ce:lts
     container_name: portainer_service
-    ports:
-      - "9000:9000" #
-      - "9443:9443" #
-      - "30777:9000" #
-      - "30779:9443" #
-      - "30776:8000"
+    # ports: # Ports are now managed by Traefik
+      # - "9000:9000"
+      # - "9443:9443"
+      # - "30777:9000" # These alternative ports are unusual, review if needed
+      # - "30779:9443"
+      # - "30776:8000"
     volumes:
-      - portainer_app_data:/data #
-      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_app_data:/data
+      - /var/run/docker.sock:/var/run/docker.sock # Portainer needs access to Docker socket
     networks:
       - my_app_net
     restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.portainer.rule=Host(`portainer-m300.local`)"
+      - "traefik.http.routers.portainer.entrypoints=web" # Assuming HTTP for now
+      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
 
 volumes:
-  portainer_app_data: # Will be named 'app_portainer_app_data'
+  portainer_app_data:
 
 networks:
   my_app_net:
