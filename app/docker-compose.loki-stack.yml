@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  loki:
+    image: grafana/loki:latest
+    container_name: loki_service
+    ports:
+      - "3100:3100"
+    volumes:
+      # This path is relative to the `docker-compose.loki-stack.yml` file,
+      # so it correctly points to `app/loki-config/`
+      - ./loki-config:/etc/loki #
+      - loki_app_data:/loki
+    command: -config.file=/etc/loki/loki-config.yaml
+    networks:
+      - my_app_net
+    restart: unless-stopped
+
+  minio:
+    image: minio/minio:latest
+    container_name: minio_service
+    ports:
+      - "9001:9000"
+      - "9002:9090"
+    volumes:
+      - minio_app_data:/data
+    environment:
+      MINIO_ROOT_USER: loki_user
+      MINIO_ROOT_PASSWORD: loki_password
+    command: server /data --console-address ":9090"
+    networks:
+      - my_app_net
+    restart: unless-stopped
+
+volumes:
+  loki_app_data: # Will be named 'app_loki_app_data'
+  minio_app_data: # Will be named 'app_minio_app_data'
+
+networks:
+  my_app_net:
+    external: true
+    name: my_app_net

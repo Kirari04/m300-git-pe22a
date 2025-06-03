@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  portainer:
+    image: portainer/portainer-ce:lts #
+    container_name: portainer_service
+    ports:
+      - "9000:9000" #
+      - "9443:9443" #
+      - "30777:9000" #
+      - "30779:9443" #
+      - "30776:8000"
+    volumes:
+      - portainer_app_data:/data #
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - my_app_net
+    restart: unless-stopped
+
+volumes:
+  portainer_app_data: # Will be named 'app_portainer_app_data'
+
+networks:
+  my_app_net:
+    external: true
+    name: my_app_net

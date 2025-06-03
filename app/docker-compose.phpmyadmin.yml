@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin_service
+    environment:
+      PMA_HOST: mysql_service #
+      PMA_PORT: 3306 #
+      MYSQL_ROOT_PASSWORD: "12345678" #
+    ports:
+      - "30888:80" #
+    networks:
+      - my_app_net
+    restart: unless-stopped
+    # depends_on:
+    #   - mysql_service # This would only work if mysql_service was in *this* file.
+                      # Startup order managed by Makefile or manually.
+
+networks:
+  my_app_net:
+    external: true
+    name: my_app_net
