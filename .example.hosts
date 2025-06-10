@@ -1,7 +1,5 @@
 127.0.0.1 portainer-m300.local
 
-127.0.0.1 traefik-m300.local
 127.0.0.1 phpmyadmin-m300.local
-127.0.0.1 loki-m300.local
 127.0.0.1 minio-api-m300.local
 127.0.0.1 minio-console-m300.local

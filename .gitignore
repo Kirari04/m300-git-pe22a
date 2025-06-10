@@ -2,3 +2,7 @@
 caddy_data
 mysql_data
 portainer_data
+nextcloud_data
+minio_data
+grafana_data
+prometheus_data
