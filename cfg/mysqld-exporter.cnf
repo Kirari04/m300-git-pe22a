@@ -1,4 +1,4 @@
-[client]
+[mysql]
 user = root
-password = your_password
+password = your_strong_mysql_password
 host = mysql
