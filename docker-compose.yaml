@@ -157,6 +157,7 @@ services:
       OBJECTSTORE_S3_AUTOCREATE: true
     volumes:
       - nextcloud_data:/var/www/html
+      - nextcloud_config:/var/www/html/config
     networks:
       - m300_net
     depends_on:
@@ -176,8 +177,9 @@ services:
     restart: unless-stopped
     environment:
       NEXTCLOUD_SERVER: "http://nextcloud"
-      NEXTCLOUD_USERNAME: ${NEXTCLOUD_ADMIN_USER}
-      NEXTCLOUD_PASSWORD: ${NEXTCLOUD_ADMIN_PASSWORD}
+      NEXTCLOUD_AUTH_TOKEN: ${NEXTCLOUD_AUTH_TOKEN}
+      NEXTCLOUD_INFO_APPS: true
+      NEXTCLOUD_INFO_UPDATE: true
     networks:
       - m300_net
     depends_on:
@@ -218,6 +220,8 @@ volumes:
   portainer_data:
     driver: local
   mysql_data:
+    driver: local
+  nextcloud_config:
     driver: local
   nextcloud_data:
     driver: local
