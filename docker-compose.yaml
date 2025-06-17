@@ -96,49 +96,6 @@ services:
   mysqld-exporter:
     image: prom/mysqld-exporter
     restart: unless-stopped
-    command:
-      # Default collectors (explicitly listed for clarity)
-      - '--collect.global_status'
-      - '--collect.global_variables'
-      - '--collect.slave_status'
-
-      # All other available collectors
-      - '--collect.auto_increment.columns'
-      - '--collect.binlog_size'
-      - '--collect.engine_innodb_status'
-      - '--collect.engine_tokudb_status'
-      - '--collect.heartbeat'
-      - '--collect.heartbeat.database=heartbeat'
-      - '--collect.heartbeat.table=heartbeat'
-      - '--collect.heartbeat.utc'
-      - '--collect.info_schema.clientstats'
-      - '--collect.info_schema.innodb_metrics'
-      - '--collect.info_schema.innodb_tablespaces'
-      - '--collect.info_schema.innodb_cmp'
-      - '--collect.info_schema.innodb_cmpmem'
-      - '--collect.info_schema.processlist'
-      - '--collect.info_schema.query_response_time'
-      - '--collect.info_schema.replica_host'
-      - '--collect.info_schema.tables'
-      - '--collect.info_schema.tables.databases=*'
-      - '--collect.info_schema.tablestats'
-      - '--collect.info_schema.schemastats'
-      - '--collect.info_schema.userstats'
-      - '--collect.mysql.user'
-      - '--collect.perf_schema.eventsstatements'
-      - '--collect.perf_schema.eventsstatementssum'
-      - '--collect.perf_schema.eventswaits'
-      - '--collect.perf_schema.file_events'
-      - '--collect.perf_schema.file_instances'
-      - '--collect.perf_schema.indexiowaits'
-      - '--collect.perf_schema.memory_events'
-      - '--collect.perf_schema.tableiowaits'
-      - '--collect.perf_schema.tablelocks'
-      - '--collect.perf_schema.replication_group_members'
-      - '--collect.perf_schema.replication_group_member_stats'
-      - '--collect.perf_schema.replication_applier_status_by_worker'
-      - '--collect.slave_hosts'
-      - '--collect.sys.user_summary'
     environment:
       DATA_SOURCE_NAME: "${MYSQL_USER}:${MYSQL_PASSWORD}@tcp(mysql:3306)/${MYSQL_DATABASE}"
     networks:
