@@ -21,14 +21,6 @@ services:
       - '--storage.tsdb.path=/prometheus'
     networks:
       - m300_net
-    # depends_on:
-    #   - cadvisor
-    #   - node-exporter
-    #   - mysqld-exporter
-    #   - redis-exporter
-    #   - caddy
-    #   - nextcloud-exporter
-    #   - minio
 
   grafana:
     image: grafana/grafana:latest
@@ -190,11 +182,6 @@ services:
   garage:
     image: dxflrs/garage:v2.0.0
     restart: unless-stopped
-    # ports:
-    #   - "3900:3900" # S3 API port
-    #   - "3901:3901" # Admin port (optional, good for management)
-    #   - "3902:3902" # Web UI port (optional)
-    #   - "3903:3903" # Metrics port (optional)
     volumes:
       - garage_data:/var/lib/garage/data
       - garage_meta_data:/var/lib/garage/meta
@@ -219,7 +206,7 @@ services:
     environment:
       API_BASE_URL: "http://garage:3903"
       S3_ENDPOINT_URL: "http://garage:3900"
-      AUTH_USER_PASS: 'admin:$$2a$$10$$nH5spPew8IKc7vOV0AuJWePtCX5bEFqF69EKtXdLBlNxg3QFyMn4W' #  https://bcrypt-generator.com/
+      AUTH_USER_PASS: ${MINIO_WEB_AUTH} #  https://bcrypt-generator.com/
 
   uptime-kuma:
     image: louislam/uptime-kuma:1
