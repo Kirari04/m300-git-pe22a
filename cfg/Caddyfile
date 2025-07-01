@@ -43,6 +43,11 @@ grafana-m300.local {
     tls internal
 }
 
+uptime-m300.local {
+    reverse_proxy uptime-kuma:3001
+    tls internal
+}
+
 :8081 {
     metrics
     

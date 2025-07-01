@@ -221,23 +221,15 @@ services:
       S3_ENDPOINT_URL: "http://garage:3900"
       AUTH_USER_PASS: 'admin:$$2a$$10$$nH5spPew8IKc7vOV0AuJWePtCX5bEFqF69EKtXdLBlNxg3QFyMn4W' #  https://bcrypt-generator.com/
 
-  # minio:
-  #   image: quay.io/minio/minio
-  #   command: server /data --console-address ":9001"
-  #   networks:
-  #     - m300_net
-  #   restart: always
-  #   environment:
-  #     MINIO_ROOT_USER: ${MINIO_ROOT_USER}
-  #     MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
-  #     MINIO_PROMETHEUS_AUTH_TYPE: "public" 
-  #   volumes:
-  #     - minio_data:/data
-  #   healthcheck:
-  #     test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
-  #     interval: 5s
-  #     timeout: 20s
-  #     retries: 3
+  uptime-kuma:
+    image: louislam/uptime-kuma:1
+    networks:
+      - m300_net
+    volumes:
+      - uptime_kuma_data:/app/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+
 
 networks:
   m300_net: 
@@ -264,4 +256,6 @@ volumes:
   garage_data:
     driver: local
   garage_meta_data:
+    driver: local
+  uptime_kuma_data:
     driver: local
