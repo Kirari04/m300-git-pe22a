@@ -44,7 +44,10 @@ scrape_configs:
     static_configs:
       - targets: ['nextcloud-exporter:9205']
 
-  - job_name: 'minio'
-    metrics_path: /minio/prometheus/metrics
+  - job_name: 'garage'
+    authorization:
+      type: Bearer
+      credentials: 'v7okP3yRtbIeLiAOVD3AV5PlTaSfXRKlQg1qCg3zoAg='
     static_configs:
-      - targets: ['minio:9000']
+      - targets:
+        - 'garage:3903'
