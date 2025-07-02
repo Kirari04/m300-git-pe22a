@@ -282,6 +282,10 @@ Richten Sie Benachrichtigungen in Uptime Kuma ein, um bei Ausfällen Ihrer Servi
 
 <img src="image-38.png" alt="Alt-Text: Uptime Kuma Notifications Konfiguration Schritt 2" width="800" />
 
+Nachdem der Nextcloud Container gestoppt wurde kam bei Telegram direkt eine Benachrichtigung, dass der Container nicht mehr verfügbar war.
+
+<img src="image-50.png" alt="Alt-Text: Uptime Kuma Notifications Konfiguration Schritt 3" width="800" />
+
 ### 6.1 Nextcloud Monitoring konfigurieren
 
 Integrieren Sie Nextcloud in Ihr Überwachungssystem, um dessen Verfügbarkeit und Leistung zu verfolgen.
@@ -289,6 +293,10 @@ Integrieren Sie Nextcloud in Ihr Überwachungssystem, um dessen Verfügbarkeit u
 <img src="image-39.png" alt="Alt-Text: Nextcloud Monitoring Konfiguration Schritt 1" width="800" />
 
 <img src="image-40.png" alt="Alt-Text: Nextcloud Monitoring Konfiguration Schritt 2" width="800" />
+
+### 6.2 Weitere Services Monitoring konfigurieren
+
+<img src="image-49.png" alt="Alt-Text: Weitere Services Monitoring Konfiguration Schritt 1" width="800" />
 
 * * * * *
 
