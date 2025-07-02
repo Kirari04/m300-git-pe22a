@@ -1,0 +1,84 @@
+---
+config:
+  theme: dark
+---
+flowchart TD
+ subgraph GlobalServices["Globale & Externe Dienste"]
+    direction LR
+        User["Internet User"]
+        cloudflare["Cloudflare DNS"]
+        backupStorage["Hetzner Backup Storage <br> Externes RZ"]
+  end
+ subgraph GatewayGroup["Gateway"]
+        caddy("Caddy <br> Reverse Proxy")
+  end
+ subgraph CoreAppsGroup["Core Applications"]
+        nextcloud("Nextcloud")
+        mysql("MySQL")
+        redis("Redis")
+        garage("Garage S3")
+  end
+ subgraph MgmtGroup["Management, Monitoring & UIs"]
+        portainer("Portainer")
+        grafana("Grafana")
+        garageUI("Garage UI")
+        uptimeKuma("Uptime Kuma")
+        prometheus("Prometheus")
+  end
+ subgraph ExporterGroup["Prometheus Exporters"]
+        cadvisor("cAdvisor")
+        nodeExporter("Node Exporter")
+        mysqlExporter("MySQLd Exporter")
+        redisExporter("Redis Exporter")
+        nextcloudExporter("Nextcloud Exporter")
+  end
+ subgraph SharedResGroup["Shared Host Resources"]
+        dockerSocket["Docker Socket"]
+  end
+ subgraph DockerEnv["Docker Umgebung (m300_net)"]
+        GatewayGroup
+        CoreAppsGroup
+        MgmtGroup
+        ExporterGroup
+        SharedResGroup
+  end
+ subgraph HostServer["Server srv01.hel1.famlink.top"]
+        DockerEnv
+  end
+ subgraph HetznerDC["Hetzner Data Center, Helsinki FIN"]
+        HostServer
+  end
+    HostServer -. "Automatische Server-Backups" .-> backupStorage
+    User -- "DNS-Anfrage" --> cloudflare
+    cloudflare -- "Antwort mit Server-IP" --> User
+    User -- "HTTPS-Verbindung" --> caddy
+    caddy -- "nextcloud.m300..." --> nextcloud
+    caddy -- "grafana.m300..." --> grafana
+    caddy -- "prometheus.m300..." --> prometheus
+    caddy -- "portainer.m300..." --> portainer
+    caddy -- "uptime.m300..." --> uptimeKuma
+    caddy -- "minio-console.m300..." --> garageUI
+    caddy -- "minio-api/web..." --> garage
+    nextcloud -- Datenbank --> mysql
+    nextcloud -- Caching --> redis
+    nextcloud -- S3 Object Storage --> garage
+    garageUI -- Verwaltet --> garage
+    grafana -- Datenquelle --> prometheus
+    prometheus -- scrape --> prometheus & cadvisor & nodeExporter & mysqlExporter & redisExporter & nextcloudExporter & caddy & garage
+    mysqlExporter -. Überwacht .-> mysql
+    redisExporter -. Überwacht .-> redis
+    nextcloudExporter -. Überwacht .-> nextcloud
+    portainer --> dockerSocket
+    cadvisor --> dockerSocket
+    uptimeKuma --> dockerSocket
+     User:::global
+     cloudflare:::global
+     backupStorage:::global
+     HostServer:::host
+    classDef global fill:#3c1e4a,stroke:#a978c2,color:#f0f0f0
+    classDef host fill:#2d333b,stroke:#8895a2,color:#f0f0f0
+    classDef gateway fill:#5e3430,stroke:#f1948a,color:#f0f0f0
+    classDef coreapps fill:#1c3d52,stroke:#5dade2,color:#f0f0f0
+    classDef mgmt fill:#3c1e4a,stroke:#a978c2,color:#f0f0f0
+    classDef exporters fill:#1a4d33,stroke:#58d68d,color:#f0f0f0
+    classDef shared fill:#2d333b,stroke:#8895a2,color:#f0f0f0
