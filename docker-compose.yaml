@@ -219,13 +219,16 @@ services:
 
   duplicati:
     image: lscr.io/linuxserver/duplicati:latest
-    container_name: duplicati
     privileged: true
+    networks:
+      - m300_net
     environment:
       - PUID=0
       - PGID=0
       - TZ=Etc/UTC
       - CLI_ARGS= #optional
+      - SETTINGS_ENCRYPTION_KEY=${DUPLICATI_SETTINGS_ENCRYPTION_KEY}
+      - DUPLICATI__WEBSERVICE_PASSWORD=${DUPLICATI_WEBSERVICE_PASSWORD}
     volumes:
       - duplicati_data:/config
       - prometheus_data:/backup/prometheus_data
