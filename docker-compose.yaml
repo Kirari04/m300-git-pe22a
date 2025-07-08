@@ -217,6 +217,29 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     restart: always
 
+  duplicati:
+    image: lscr.io/linuxserver/duplicati:latest
+    container_name: duplicati
+    privileged: true
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=Etc/UTC
+      - CLI_ARGS= #optional
+    volumes:
+      - duplicati_data:/config
+      - prometheus_data:/backup/prometheus_data
+      - grafana_data:/backup/grafana_data
+      - caddy_data:/backup/caddy_data
+      - portainer_data:/backup/portainer_data
+      - mysql_data:/backup/mysql_data
+      - nextcloud_config:/backup/nextcloud_config
+      - nextcloud_data:/backup/nextcloud_data
+      - garage_data:/backup/garage_data
+      - garage_meta_data:/backup/garage_meta_data
+      - uptime_kuma_data:/backup/uptime_kuma_data
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
 
 networks:
   m300_net: 
@@ -238,11 +261,11 @@ volumes:
     driver: local
   nextcloud_data:
     driver: local
-  minio_data:
-    driver: local
   garage_data:
     driver: local
   garage_meta_data:
     driver: local
   uptime_kuma_data:
+    driver: local
+  duplicati_data:
     driver: local

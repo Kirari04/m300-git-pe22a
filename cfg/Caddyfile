@@ -48,6 +48,11 @@ uptime-m300.local {
     tls internal
 }
 
+bck-m300.local {
+    reverse_proxy duplicati:8200
+    tls internal
+}
+
 :8081 {
     metrics
     
