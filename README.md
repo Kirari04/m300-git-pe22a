@@ -149,9 +149,13 @@ Siehe [Produktive Umgebung aufbauen](./docs/AUFBAU_PROD.md)
 
 -   **Monitoring:** Prometheus, Grafana, Uptime Kuma, Diverse Prometheus Exporter
 
--   **Services:** Nextcloud, Garage (S3-Speicher)
+-   **Services:** Nextcloud
 
--   **Datenbank:** MariaDB (für Nextcloud)
+-   **Speicher** Garage (S3-Speicher)
+
+-   **Datenbank:** MySql (für Nextcloud)
+
+-   **Backups:** Duplicati und Hetzner VM Snapshots
 
 -   **Benachrichtigungen:** Telegram
 

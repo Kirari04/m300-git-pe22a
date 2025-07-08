@@ -8,6 +8,7 @@ flowchart TD
         User["Internet User"]
         cloudflare["Cloudflare DNS"]
         backupStorage["Hetzner Backup Storage <br> Externes RZ"]
+        googleDrive["Google Drive <br> Externes Backup"]
   end
  subgraph GatewayGroup["Gateway"]
         caddy("Caddy <br> Reverse Proxy")
@@ -24,6 +25,7 @@ flowchart TD
         garageUI("Garage UI")
         uptimeKuma("Uptime Kuma")
         prometheus("Prometheus")
+        duplicati("Duplicati")
   end
  subgraph ExporterGroup["Prometheus Exporters"]
         cadvisor("cAdvisor")
@@ -71,9 +73,15 @@ flowchart TD
     portainer --> dockerSocket
     cadvisor --> dockerSocket
     uptimeKuma --> dockerSocket
+    subgraph BackupFlow["Volume Backups"]
+        direction LR
+        caddy & prometheus & grafana & portainer & mysql & nextcloud & garage & uptimeKuma -.-> duplicati
+        duplicati -. "Backup zu" .-> googleDrive
+    end
      User:::global
      cloudflare:::global
      backupStorage:::global
+     googleDrive:::global
      HostServer:::host
     classDef global fill:#3c1e4a,stroke:#a978c2,color:#f0f0f0
     classDef host fill:#2d333b,stroke:#8895a2,color:#f0f0f0
