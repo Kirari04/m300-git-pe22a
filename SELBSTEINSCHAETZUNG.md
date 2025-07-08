@@ -1,9 +1,5 @@
 # Selbsteinschätzung des Projekts
 
-Hier bewerte ich meine Arbeit anhand der Anforderungen. Ich habe versucht, alle Punkte bestmöglich zu erfüllen und zu dokumentieren.
-
-**Gesamtpunkte: 3 / 3**
-
 ---
 
 ### 1. Ermittlung erforderlicher Services
