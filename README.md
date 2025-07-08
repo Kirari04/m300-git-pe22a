@@ -124,9 +124,17 @@ Dieses Tagebuch fasst den Projektverlauf und die wöchentlichen Fortschritte zus
 **3\. Umsetzung: Schritt-für-Schritt-Anleitung**
 ------------------------------------------------
 
-Dieser Abschnitt enthält die detaillierte technische Dokumentation zur Reproduktion der Umgebung.
+Die Umsetzung des Projekts folgte einer "Lift and Shift"-Strategie. Die gesamte Umgebung wurde zuerst vollständig auf einer lokalen Maschine entwickelt und getestet, bevor sie auf die produktive Hetzner Cloud-Infrastruktur "gehoben" wurde.
 
-Siehe [Produktive Umgebung aufbauen](./docs/AUFBAU_PROD.md)
+Dieser Ansatz wurde aus mehreren strategischen Gründen gewählt:
+-   **Kosten-Effizienz:** Die lokale Entwicklung verursacht keine laufenden Kosten für Cloud-Ressourcen. Server und Services müssen nur für die finale Bereitstellung und den produktiven Betrieb gemietet werden.
+-   **Vereinfachtes Testen:** In einer lokalen Umgebung können Tests schneller und ohne Netzwerk-Latenz durchgeführt werden. Fehler und Konfigurationsprobleme lassen sich so agiler identifizieren und beheben, ohne die Stabilität einer Live-Umgebung zu gefährden.
+-   **Reproduzierbarkeit:** Durch die Entwicklung mit Docker Compose wird sichergestellt, dass die exakt gleiche Konfiguration, die lokal funktioniert, auch in der Cloud zuverlässig läuft.
+
+Die detaillierte technische Dokumentation für beide Phasen findet sich in den folgenden Anleitungen:
+
+-   **1. Lokale Entwicklung:** [Anleitung zum Aufbau der lokalen Testumgebung](./docs/AUFBAU_LOCAL.md)
+-   **2. Produktive Bereitstellung:** [Anleitung zum Aufbau der produktiven Umgebung](./docs/AUFBAU_PROD.md)
 
 **4\. Sicherheitskonzept**
 -------------------------
