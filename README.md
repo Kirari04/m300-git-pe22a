@@ -3,6 +3,11 @@
 
 Dieses Projekt dokumentiert den Entwurf, die Implementierung und die Überwachung einer containerisierten Service-Infrastruktur. Das Ziel war die Bereitstellung einer stabilen und wartbaren produktiven Umgebung unter Verwendung von Technologien wie Docker, Nextcloud, Prometheus und Grafana.
 
+## Stakeholder
+
+-   **IT-Abteilung:** Die IT-Abteilung ist für die Bereitstellung der Produktivumgebung verantwortlich.
+    -   Lev Saminskij
+
 * * * * *
 
 ### **Inhaltsverzeichnis**

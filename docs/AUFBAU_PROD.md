@@ -41,6 +41,8 @@ Diese Dokumentation führt Sie Schritt für Schritt durch den Aufbau einer produ
 -   **8\. Zusätzliche Backups definieren**
     -   8.1 Duplicati Konfiguration
 -   **9\. Testfälle**
+-   **10\. Sicherheitskonzept**
+-   **11\. Wartung und Betrieb**
 
 * * * * *
 
@@ -348,3 +350,86 @@ In Google Drive sollte nun unter dem Ordner M300 alle unsere Backups angezeigt w
 | Testfall-ID | Testziel | Schritte | Erwartetes Ergebnis | Bestanden? |
 | :--- | :--- | :--- | :--- | :--- |
 | **BAT-001** | Duplicati Backup-Konfiguration | 1. Die Duplicati Weboberfläche aufrufen.<br>2. Überprüfen, ob die definierten **Backup-Jobs** sichtbar und korrekt konfiguriert sind.<br>3. Manuell einen **Backup-Job starten**.<br>4. Im Zielspeicher (z.B. Google Drive) überprüfen, ob der **M300-Ordner** und die Backup-Dateien erstellt wurden. | Der manuelle Backup-Job wird erfolgreich abgeschlossen, und die Backup-Dateien sind im konfigurierten Cloud-Speicher sichtbar. | ✅ |
+
+* * * * *
+
+## 10. Sicherheitskonzept
+
+Dieser Abschnitt beschreibt die implementierten Sicherheitsmassnahmen und wie diese getestet werden können.
+
+### 10.1 Übersicht der Massnahmen
+
+| Sicherheitsbereich | Massnahme | Begründung |
+| :--- | :--- | :--- |
+| **Transportverschlüsselung** | Caddy erzwingt HTTPS für alle externen Verbindungen. | Schützt Daten während der Übertragung vor dem Mitlesen (Man-in-the-Middle-Angriffe). |
+| **Secret Management** | Passwörter, API-Keys etc. werden in einer `.env`-Datei gespeichert, die durch `.gitignore` ignoriert wird. | Verhindert, dass sensible Daten in die Versionskontrolle gelangen. |
+| **Zugriffsbeschränkung** | Administrative UIs (Prometheus, Grafana) sind durch Basic Authentication geschützt. | Reduziert das Risiko unbefugter Zugriffe auf kritische Monitoring-Komponenten. |
+| **Minimale Angriffsfläche** | Nur die Ports 80 und 443 sind öffentlich zugänglich. Die interne Kommunikation erfolgt über ein Docker-Netzwerk. | Verringert die Anzahl der potenziellen Angriffspunkte von aussen. |
+| **Regelmässige Updates** | Das Host-System und die Docker-Images werden regelmässig aktualisiert. | Schliesst bekannte Sicherheitslücken in der Software. |
+
+### 10.2 Sicherheitstests
+
+| Testfall-ID | Testziel | Schritte | Erwartetes Ergebnis | Bestanden? |
+| :--- | :--- | :--- | :--- | :--- |
+| **SEC-001** | HTTPS-Erzwingung | 1. Versuchen, eine Service-URL mit `http://` aufzurufen (z.B. `http://nextcloud.m300.famlink.top`). | Der Aufruf wird automatisch auf `https://` umgeleitet. Das Zertifikat ist gültig. | ✅ |
+| **SEC-002** | Secret-Management | 1. Den Befehl `git status` ausführen. | Die `.env`-Datei wird nicht als änderbare oder ungetrackte Datei angezeigt. | ✅ |
+| **SEC-003** | Zugriff auf geschützte Routen | 1. Die URL der Prometheus-UI aufrufen (`https://prometheus.m300.famlink.top`). | Es erscheint ein Basic-Auth-Dialog. Ohne korrekte Anmeldedaten wird der Zugriff verweigert (Status 401). | ✅ |
+
+* * * * *
+
+## 11. Wartung und Betrieb
+
+Dieser Abschnitt beschreibt die wiederkehrenden Aufgaben für den stabilen Betrieb der Umgebung.
+
+### 11.1 Update-Prozess
+
+Die Aktualisierung der Services erfolgt kontrolliert über Docker Compose.
+
+1.  **Images aktualisieren:**
+    ```bash
+    docker compose pull
+    ```
+
+    <img src="image-56.png" alt="Alt-Text: Docker Compose Pull" width="800" />
+
+2.  **Container neu erstellen:**
+    ```bash
+    docker compose up -d
+    ```
+
+    <img src="image-57.png" alt="Alt-Text: Docker Compose Up" width="800" />
+
+3.  **Veraltete Images entfernen:**
+    ```bash
+    docker image prune
+    ```
+
+    <img src="image-58.png" alt="Alt-Text: Docker Image Prune" width="800" />
+
+    <img src="image-59.png" alt="Alt-Text: Docker Image Prune" width="800" />
+
+### 11.2 Backup-Wiederherstellung (Restore)
+
+Ein Restore-Szenario ist entscheidend für die Notfallplanung.
+
+#### 11.2.1 Wiederherstellung aus Server-Snapshot
+
+1.  Im Hetzner-Interface den gewünschten Snapshot auswählen.
+2.  Den Server aus diesem Snapshot wiederherstellen.
+3.  Nach dem Hochfahren die Funktionalität aller Dienste überprüfen.
+
+#### 11.2.2 Wiederherstellung aus Duplicati-Backup
+
+1.  Duplicati auf einem neuen oder wiederhergestellten System installieren.
+2.  Den Backup-Job mit dem Cloud-Speicher (Google Drive) verbinden.
+3.  Die Option "Direct restore from backup files" wählen.
+4.  Die gewünschten Dateien und den Wiederherstellungsort auswählen.
+5.  Die wiederhergestellten Konfigurationsdateien und Daten an die korrekten Orte im Projektverzeichnis verschieben.
+6.  Die Docker-Container neu starten: `docker compose up -d`.
+
+### 11.3 Testfälle für Wartung
+
+| Testfall-ID | Testziel | Schritte | Erwartetes Ergebnis | Bestanden? |
+| :--- | :--- | :--- | :--- | :--- |
+| **MNT-001** | Update-Prozess | 1. Den Update-Prozess gemäss Anleitung durchführen.<br>2. Die Version eines aktualisierten Containers überprüfen (z.B. `docker inspect nextcloud | grep "image"`). | Alle Container starten erfolgreich. Die Dienste sind nach dem Update verfügbar und funktionsfähig. | ✅ |
+| **MNT-002** | Backup-Restore-Simulation | 1. Eine Test-Datei in Nextcloud hochladen.<br>2. Ein manuelles Duplicati-Backup durchführen.<br>3. Die Test-Datei in Nextcloud löschen.<br>4. Die Datei aus dem Duplicati-Backup wiederherstellen.<br>5. Überprüfen, ob die Datei wieder in Nextcloud vorhanden ist. | Die Wiederherstellung der Datei ist erfolgreich. | ✅ |
