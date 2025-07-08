@@ -154,7 +154,9 @@ Detaillierte Informationen finden sich im [Sicherheitskonzept in der Aufbau-Anle
 
 Die Wartbarkeit der Umgebung wurde durch folgende Punkte sichergestellt:
 
--   **Automatisierte Backups:** Tägliche Snapshots des gesamten Servers sowie detaillierte Backups der Anwendungsdaten via Duplicati.
+-   **Zweistufige Backup-Strategie:**
+    -   **Hetzner VM-Snapshots:** Tägliche Snapshots des gesamten Servers dienen als Desaster-Recovery-Lösung. Sie ermöglichen eine schnelle Wiederherstellung der kompletten VM im Falle eines schwerwiegenden Systemfehlers, sind jedoch nicht für granulare Restores geeignet.
+    -   **Duplicati Backups:** Zusätzlich zu den Snapshots sichert Duplicati täglich die Anwendungsdaten (z.B. Konfigurationen, Datenbanken) auf einen externen Cloud-Speicher. Diese Backups sind ideal für granulare Wiederherstellungen, beispielsweise wenn versehentlich eine einzelne Datei oder Konfiguration gelöscht wurde, ohne den gesamten Server zurücksetzen zu müssen.
 -   **Definierte Update-Prozesse:** Eine klare Anleitung zur Aktualisierung der einzelnen Container-Services.
 -   **Zentrales Logging und Monitoring:** Ermöglicht eine schnelle Fehleranalyse.
 -   **Wiederherstellungsprozess:** Die Dokumentation beschreibt die notwendigen Schritte zur Wiederherstellung der Umgebung aus einem Backup.
